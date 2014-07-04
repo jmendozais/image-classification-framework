@@ -1,0 +1,12 @@
+Actualizar el modelo de datos, y el acceso de datos en base a :
+- Path sets
+- Feature sets
+- Label sets
+- Label descriptors OK!
+Utilizar functores para aplicar un mismo algoritmo a varios datos ( Batch ):
+- Misma transformacion a varias imagenes
+- Mismo extractor de caracteritisa a varias imagenes
+- Misma transformacion a conjuntos de caracteristicas
+- Merges a conjuntos de caracteristicas
+La logica de acceso a datos debe ser mejor programada:
+- DAOS con template especialization por metodo, no por clase 

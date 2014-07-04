@@ -1,0 +1,37 @@
+# Compiled Object files
+*.slo
+*.lo
+*.o
+*.obj
+
+# Compiled Dynamic libraries
+*.so
+*.dylib
+*.dll
+
+# Compiled Static libraries
+*.lai
+*.la
+*.a
+*.lib
+
+# Executables
+*.exe
+*.out
+*.app
+
+*.d
+
+.DS_Store
+*/.DS_Store
+.idea/
+*/.idea/
+.cproject
+.project
+.settings/
+
+*.pdf
+*.aux
+*.log
+
+Debug/
