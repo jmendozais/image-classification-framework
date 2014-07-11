@@ -7,7 +7,7 @@
 
 #ifndef ABC_SELECTOR_H_
 #define ABC_SELECTOR_H_
-#include "feature_selector.h";
+#include "feature_selector.h"
 class ABCWrapperSelector : public AbstractWrapperFeatureSelector {
 public:
 		ABCWrapperSelector ( ClassifierInterface * classifier, AbstractClassifierEvaluator * evaluator ) : AbstractWrapperFeatureSelector ( classifier, evaluator ) {}

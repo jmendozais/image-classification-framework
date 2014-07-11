@@ -8,7 +8,7 @@
 #ifndef VALIDATION_H_
 #define VALIDATION_H_
 
-#include "classification/classifier.h";
+#include "classification/classifier.h"
 #include "new/data.h"
 #include <algorithm>
 

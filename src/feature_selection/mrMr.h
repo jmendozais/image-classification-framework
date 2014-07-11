@@ -9,6 +9,7 @@
 #define MRMR_H_
 
 #include "feature_selector.h"
+#include "../new/data.h"
 
 #include <opencv/cv.h>
 

@@ -8,8 +8,8 @@
 #ifndef FEATURE_SELECTOR_H_
 #define FEATURE_SELECTOR_H_
 
-#include "../data_model/data_model.h";
-#include "../evolutive_computation.h";
+//#include "../data_model/data_model.h";
+#include "../evolutive_computation.h"
 #include "../classification/classifier.h"
 #include "../validation.h"
 

@@ -10,7 +10,7 @@
 
 #include <vector>
 #include <opencv/cv.h>
-#include "../data_model/data_model.h";
+//#include "../data_model/data_model.h";
 
 class FeatureExtractorInterface {
 public:

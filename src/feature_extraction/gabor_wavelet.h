@@ -14,7 +14,10 @@
 #include <cmath>
 #include <opencv/cv.h>
 #include <opencv/highgui.h>
+#include <boost/shared_ptr.hpp>
+
 #include "../ipcore/util.h"
+#include "../new/data.h"
 #include "feature_extractor.h"
 using namespace std;
 using namespace cv;

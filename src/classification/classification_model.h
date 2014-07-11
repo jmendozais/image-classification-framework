@@ -8,11 +8,11 @@
 #ifndef CLASSIFICATION_MODEL_H_
 #define CLASSIFICATION_MODEL_H_
 
-#include "image_transformation/image_transform.h";
-#include "feature_extraction/feature_extractor.h";
-#include "feature_selection/feature_selector.h";
-#include "classification/classifier.h";
-#include "data_model/data_model.h";
+#include "../image_transformation/image_transform.h"
+#include "../feature_extraction/feature_extractor.h"
+#include "../feature_selection/feature_selector.h"
+#include "classifier.h"
+//#include "data_model/data_model.h";
 
 
 class ClassificationModel {

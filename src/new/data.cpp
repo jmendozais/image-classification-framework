@@ -46,9 +46,16 @@ bool ClassificationDataSet::create ( std::string descriptor_path, std::string da
 	fs::path root ( data_set_path );
 	int class_counter = -1, item_counter = -1;
 	if ( fs::is_directory ( root ) ) {
-		for ( fs::directory_iterator it = fs::directory_iterator ( root ); it != fs::directory_iterator(); ++ it ) {
+		std::cout << "IS DIRECTORY " << root <<  std::endl;
+		fs::directory_iterator it = fs::directory_iterator ( root );
+		std::cout << "IT init" << std::endl;
+
+		for (; it != fs::directory_iterator(); ++ it ) {
+			std::cout << "IN" << std::endl;
 			if ( fs::is_directory ( *it ) ) {
+				std::cout << "IS 1. DIRECTORY " << std::endl;
 				fs::path dir = (*it).path();
+				std::cout <<  dir << std::endl;
 				ClassDescriptorPtr desc ( new ClassDescriptor() );
 				desc->id = ++ class_counter;
 				desc->name = dir.filename().string();
@@ -65,12 +72,14 @@ bool ClassificationDataSet::create ( std::string descriptor_path, std::string da
 					data_class_.push_back(desc->id);
 				}
 			}
+			std::cout << "OUT" << std::endl;
+
 		}
 	} else {
 		std::cerr << "the input is not a directory" << std::endl;
 		return false;
 	}
-
+	std::cout << "WORK!!!!! " << std::endl;
 	// Writing descriptor
 	write(descriptor_path_, data_set_path_);
 	return true;

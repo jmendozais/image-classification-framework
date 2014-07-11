@@ -10,7 +10,7 @@
 
 #include "../new/data.h"
 
-/*
+
 #include <iostream>
 #include <fstream>
 #include <string>
@@ -41,5 +41,5 @@ public:
 	int size() const { return size_; }
 	int dim() const { return dim_; }
 };
-*/
+
 #endif /* FEATURE_SET_H_ */

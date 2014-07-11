@@ -14,6 +14,8 @@
 #include <string>
 #include <opencv/cv.h>
 #include <boost/shared_ptr.hpp>
+class AbstractParams {};
+
 struct DataItem {
 	int id;
 	std::string path;
@@ -242,6 +244,8 @@ protected:
 
 class WekaFeatureSetDao : public AbstractFeatureSetDao {
 public:
+	WekaFeatureSetDao() {}
+	~WekaFeatureSetDao() {}
 	virtual void create ( std::string path );
 	virtual void read ( std::string path );
 	virtual void update ( std::string path );

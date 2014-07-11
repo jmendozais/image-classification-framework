@@ -16,5 +16,5 @@
 
 #include "classification_data_set.h"
 #include "feature_set.h"
-struct AbstractParams {};
+class AbstractParams {};
 #endif /* DATA_MODEL_H_ */

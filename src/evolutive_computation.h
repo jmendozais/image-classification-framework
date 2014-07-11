@@ -18,14 +18,14 @@
 /*******************************************************/
 
 #define NP 40  /* Numero de abejas ( poblacion = exploradoras + supervisoras ) */
-#define FoodNumber NP/2 /*Numero de fuentes de alimento, la mitad de la poblacion */
-#define limit 25  /* una fuente de alimento, que no es mejorada en "limite" iteraciones es abandonada por su abeja empleada*/
+#define FOOD_NUMBER NP/2 /*Numero de fuentes de alimento, la mitad de la poblacion */
+#define LIMIT 25  /* una fuente de alimento, que no es mejorada en "limite" iteraciones es abandonada por su abeja empleada*/
 #define maxCycle 3000 /* numero de ciclos de recoleccion ( criterio de parada */
 #define MAXD 500
 /* Variables del problema especifico*/
-#define D 20 /*numero de parametros del problema a optimizar*/
-#define lb -5.12 /* limite interior de los parametros */
-#define ub 5.12 /* limite superior de los parametros */
+//#define DP 20 /*numero de parametros del problema a optimizar*/
+#define LB -5.12 /* limite interior de los parametros */
+#define UB 5.12 /* limite superior de los parametros */
 
 
 #define runtime 30  /* numero de veces que puede ser ejecutado el algoritmo*/
@@ -40,11 +40,11 @@ typedef ObjectiveFunction* FunctionCallbackPtr;
 
 class BinaryABCOptimizacion {
 private:
-	double Foods[FoodNumber][MAXD]; /*Fuentes de alimento, cada fuente de alimento contiene una posible solucion que esta siendo optimizada*/
-	double f[FoodNumber];  /*f es un arreglo que contiene los valores de la funcion objetivo a ser optimizada*/
-	double fitness[FoodNumber]; /*Este arreglo fitnes contiene el valor de aptitud de cada fuente de alimento*/
-	double trial[FoodNumber]; /*Este arreglo contiene el numero de pruebas realizadas en cada fuente de alimento, si pasa el limite la abeja empleada lo abandona*/
-	double prob[FoodNumber]; /*Este arreglo contiene las probabilidades de cada solucion de ser escogida*/
+	double Foods[FOOD_NUMBER][MAXD]; /*Fuentes de alimento, cada fuente de alimento contiene una posible solucion que esta siendo optimizada*/
+	double f[FOOD_NUMBER];  /*f es un arreglo que contiene los valores de la funcion objetivo a ser optimizada*/
+	double fitness[FOOD_NUMBER]; /*Este arreglo fitnes contiene el valor de aptitud de cada fuente de alimento*/
+	double trial[FOOD_NUMBER]; /*Este arreglo contiene el numero de pruebas realizadas en cada fuente de alimento, si pasa el limite la abeja empleada lo abandona*/
+	double prob[FOOD_NUMBER]; /*Este arreglo contiene las probabilidades de cada solucion de ser escogida*/
 	double solution [MAXD]; /*Nueva solucion*/
 	double ObjValSol; /*Valor objetivo */
 	double FitnessSol; /*Valor de aptitud de la nueva solucion*/
@@ -75,7 +75,7 @@ public:
 	}
 	void memorizarMejoresFuentes() {
 	  int i,j;
-		for(i=0;i<FoodNumber;i++)	{
+		for(i=0;i<FOOD_NUMBER;i++)	{
 			//print_vector( Foods[i] );
 			if (f[i]<GlobalMin)	{
 				GlobalMin=f[i];
@@ -98,7 +98,7 @@ public:
 	/* Inicializar todas las fuentes de alimento */
 	void inicializar() {
 		int i;
-		for(i=0;i<FoodNumber;i++) {
+		for(i=0;i<FOOD_NUMBER;i++) {
 			inicializarFuente(i);
 		}
 		GlobalMin=f[0];
@@ -108,19 +108,19 @@ public:
 	void enviarAbejasEmpleadas() {
 	  int i,j;
 	  /*fase de las abejas empleadas*/
-		for (i=0;i<FoodNumber;i++) {
+		for (i=0;i<FOOD_NUMBER;i++) {
 			/* El parametro a ser cambiado es determinado aleatoriamente */
 			r = ((double)rand() / ((double)(RAND_MAX)+(double)(1)) );
 			param2change=(int)(r*dim_);
 
 			/* Se selecciona aleatoriamente un vecino para obtener una solucion mutante de i */
 			r = (   (double)rand() / ((double)(RAND_MAX)+(double)(1)) );
-			neighbour=(int)(r*FoodNumber);
+			neighbour=(int)(r*FOOD_NUMBER);
 
 			/* La solucion aleatoriamente escojida debe ser diferente de i*/
 			while(neighbour==i)	{
 				r = (   (double)rand() / ((double)(RAND_MAX)+(double)(1)) );
-				neighbour=(int)(r*FoodNumber);
+				neighbour=(int)(r*FOOD_NUMBER);
 			}
 			for(j=0;j<dim_;j++)
 				solution[j]=Foods[i][j];
@@ -152,11 +152,11 @@ public:
 		int i;
 		double maxfit;
 		maxfit=fitness[0];
-		for (i=1;i<FoodNumber;i++) {
+		for (i=1;i<FOOD_NUMBER;i++) {
 			if (fitness[i]>maxfit)
 			maxfit=fitness[i];
 		}
-	 	for (i=0;i<FoodNumber;i++) {
+	 	for (i=0;i<FOOD_NUMBER;i++) {
 			prob[i]=(0.9*(fitness[i]/maxfit))+0.1;
 		}
 	}
@@ -166,7 +166,7 @@ public:
 	  i=0;
 	  t=0;
 	  /* Fase de abejas supervisoras */
-	  while(t<FoodNumber)	{
+	  while(t<FOOD_NUMBER)	{
 			r = ( (double)rand() / ((double)(RAND_MAX)+(double)(1)) );
 			if(r<prob[i]) {/*Escoger una fuende de alimento de acuerdo a su probabilidad de ser escogida*/
 				t++;
@@ -177,12 +177,12 @@ public:
 
 				/* Se selecciona aleatoriamente una solucion a ser usada para producir una solucion mutante de la solucion i*/
 				r = (   (double)rand() / ((double)(RAND_MAX)+(double)(1)) );
-				neighbour=(int)(r*FoodNumber);
+				neighbour=(int)(r*FOOD_NUMBER);
 
 				/* La solucion aleatoriamente seleccionada debe ser diferente de la solucion i*/
 				while(neighbour==i)	{
 					r = (   (double)rand() / ((double)(RAND_MAX)+(double)(1)) );
-					neighbour=(int)(r*FoodNumber);
+					neighbour=(int)(r*FOOD_NUMBER);
 				}
 				for(j=0;j<dim_;j++)
 					solution[j]=Foods[i][j];
@@ -208,18 +208,18 @@ public:
 				}
 			} /* Si se ha iterado sobre todas las fuentes sin completar el alimento */
 			i++;
-			if (i==FoodNumber)i=0;
+			if (i==FOOD_NUMBER)i=0;
 		}
 	}
 	/* Determinar que fuentes de alimento exeden el limite de pruebas*/
 	void enviarAbejasExploradoras()	{
 		int maxtrialindex,i;
 		maxtrialindex=0;
-		for (i=1;i<FoodNumber;i++) {
+		for (i=1;i<FOOD_NUMBER;i++) {
 			if (trial[i]>trial[maxtrialindex])
 				maxtrialindex=i;
 		}
-		if(trial[maxtrialindex]>=limit)	{
+		if(trial[maxtrialindex]>=LIMIT)	{
 			inicializarFuente(maxtrialindex);
 		}
 	}

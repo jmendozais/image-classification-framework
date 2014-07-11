@@ -4,7 +4,7 @@
  *  Created on: Jan 14, 2013
  *      Author: jmendoza
  */
-/*
+
 #include "feature_set.h"
 #include "../ipcore/util.h"
 FeatureSet::FeatureSet ( int size , int dims ) {
@@ -93,4 +93,4 @@ void FeatureSet::normalize() {
 }
 double FeatureSet::get_value( int i, int j ) const { return mat_[i][j]; }
 void FeatureSet::set_value( int i, int j, double val ) { mat_[i][j] = val; }
-*/
+

@@ -10,6 +10,7 @@
 
 #include "feature_extractor.h"
 #include "gabor_wavelet.h"
+#include "../new/data.h"
 class GaborPCA : public FeatureExtractorInterface {
 public:
 	GaborPCA( const GaborWavelet& wavelets, ImageSet &images, int rows, int cols, int dim );

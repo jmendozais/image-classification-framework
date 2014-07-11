@@ -1,5 +1,6 @@
 #include <iostream>
 #include "icf.h"
+
 void test_classification_image_set() {
 	ClassificationImageSet data_set;
 	data_set.create("/home/jmendoza/Escritorio/coffee.data", "/home/jmendoza/projects/cecovasa/data/LotePruebaV1.0/Resultado");
@@ -145,12 +146,12 @@ void test_knn () {
 }
 void test_all() {
 	ClassificationImageSet data;
-	data.create("/home/jmendoza/Desktop/coffee.data", "/home/jmendoza/projects/cecovasa/data/lote1.2/Resultado");
-	data.read("/home/jmendoza/Desktop/coffee.data");
+	data.create("/Users/mac/research/projects/coffee1.data", "/Users/mac/research/databases/cecovasa");
+	data.read("/Users/mac/research/projects/coffee1.data");
 	ClassificationModel model;
 	GaborWaveletParams params;
 	params.num_orientations = 4;
-	params.num_scales = 5;
+	params.num_scales = 3;
 	params.mask_type = GaborWaveletParams::NO_MASK;
 	GaborWavelet extractor ( params );
 
@@ -193,13 +194,13 @@ void test_rayner() {
 	FeatureSet features, selected_features;
 	read_feature_vectors_in_libsvm_format ( data_set, features, "/home/jmendoza/Desktop/features.dat");
 	std::vector< std::vector<double> > fv = features.std_mat();
-		std::vector< int > classes = data_set.std_data_classes();
-		KNNClassifier knn(10);
-		//knn.train( fv, classes );
-		KFOLDCV evaluator ( &knn, &data_set, &features, 10 );
-		ClassifierEvaluatorResult eval = evaluator.evaluate();
-		std::cout << "Global Accuracy " << eval.global_accuracy << std::endl;
-		//write_classifier_evaluation_report( eval, data_set, "/home/jmendoza/Desktop/report_cdh_kfold" );
+	std::vector< int > classes = data_set.std_data_classes();
+	KNNClassifier knn(10);
+	//knn.train( fv, classes );
+	KFOLDCV evaluator ( &knn, &data_set, &features, 10 );
+	ClassifierEvaluatorResult eval = evaluator.evaluate();
+	std::cout << "Global Accuracy " << eval.global_accuracy << std::endl;
+	//write_classifier_evaluation_report( eval, data_set, "/home/jmendoza/Desktop/report_cdh_kfold" );
 }
 void test_feature_extractor() {
 	// Classification pipeline
@@ -550,8 +551,14 @@ void pgabor() {
 	cv::Mat test = cv::imread("/home/jmendoza/projects/image_databases/caltech256/001.ak47/001_0001.jpg");
 	extractor->extractFeatures(test);
 }
+
+
 int main(int argc, char* argv[])
 {
+	std::string opt = "none";
+	if(argc > 2) {
+		opt = argv[1];
+	}
 	//test_small_data();
 	//test_classification_model();
 	//test_feature_set();
@@ -560,7 +567,7 @@ int main(int argc, char* argv[])
 	//test_feature_selection_3();
 	//test_brocados_2();
 	//test_knn();
-	//test_all();
+	test_all();
 	//test_loocv();
 	//cdh();
 	//test_rayner();
@@ -572,7 +579,7 @@ int main(int argc, char* argv[])
 	//gabor_FTW("/home/jmendoza/Desktop/LotePruebaV1.3/BS/BrocadoS2888.jpg");
 	//gabor_FTW("/home/jmendoza/face.jpg");
 	//gabor_FTW("/home/jmendoza/projects/compucorp/data/sample.jpg");
-	test_gabor_visualizer("/home/jmendoza/Desktop/LotePruebaV1.3/BS/BrocadoS2888.jpg");
+	//test_gabor_visualizer("/Users/mac/research/databases/cecovasa/BrocadoL/BrocadoL1.jpg");
 	//compucorp();
 	//mit();
 	//kfold ( "/home/jmendoza/projects/image_databases/mit.data", "/home/jmendoza/projects/image_databases/mitpgabor_mag.nfeat");

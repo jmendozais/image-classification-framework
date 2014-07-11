@@ -9,15 +9,15 @@
 #define ICF_H_
 
 // Image Classification Framework default headers
-#include "classification_model.h"
-#include "feature_extraction/gabor_wavelet.h";
-#include "feature_extraction/gabor_pca.h";
-#include "feature_extraction/cdh.h";
-#include "feature_selection/mrMr.h";
-#include "feature_selection/abc_selector.h";
-#include "classification/knn.h";
+#include "classification/classification_model.h"
+#include "feature_extraction/gabor_wavelet.h"
+#include "feature_extraction/gabor_pca.h"
+#include "feature_extraction/cdh.h"
+#include "feature_selection/mrMr.h"
+#include "feature_selection/abc_selector.h"
+#include "classification/knn.h"
 #include "validation.h"
-#include "image_transformation/image_transform.h";
+#include "image_transformation/image_transform.h"
 #include "new/batch.h"
 #include "new/data.h"
 #include "new/transform.h"
