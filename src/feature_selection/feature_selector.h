@@ -12,7 +12,7 @@
 #include "../evolutive_computation.h"
 #include "../classification/classifier.h"
 #include "../validation.h"
-
+#include <cmath>
 class FilterSelectorInterface {
 public:
 	virtual FeatureSet selectFeatures ( const FeatureSet& ) = 0;
@@ -43,8 +43,8 @@ public:
 		}
 		evaluator_->changeData(selected_data, responses_);
 		ClassifierEvaluatorResult result = evaluator_->evaluate();
-		std::cout << "output " << result.global_accuracy << std::endl;
-		return -1.0 * result.global_accuracy;
+		//std::cout << "output " << result.global_accuracy << std::endl;
+		return pow(2, 100*(1-result.global_accuracy));
 	}
 private:
 	ClassifierInterface * classifier_;

@@ -248,13 +248,10 @@ void FeatureSet::read(std::string path ) {
 		for ( int j = 0; j < dim_; ++ j )
 			fin >> mat_[i][j];
 	}
-}
-cv::Mat FeatureSet::cv_mat() const {
 	cv::Mat ans ( size_, dim_, CV_64F);
 	for ( int i = 0; i < size_; ++ i )
 		for ( int j = 0; j < dim_; ++ j )
 			ans.ptr<double>(i)[j] = mat_[i][j];
-	return ans;
 }
 std::vector< std::vector<double> > FeatureSet::std_mat() const {
 	return mat_;
@@ -331,7 +328,13 @@ void FeatureSet::setClassNames( std::vector<std::string> names ) {
 int FeatureSet::size() const { return size_; }
 int FeatureSet::dim() const { return dim_; }
 int FeatureSet::num_classes() const { return class_names_.size(); }
-
+cv::Mat FeatureSet::cv_mat() const {
+	cv::Mat ans ( size_, dim_, CV_64F);
+	for ( int i = 0; i < size_; ++ i )
+		for ( int j = 0; j < dim_; ++ j )
+			ans.ptr<double>(i)[j] = mat_[i][j];
+	return ans;
+}
 // DAOS
 void AbstractImageSetDao::setImageSet ( const ImageSet& dset ) {
 	images_ = dset;

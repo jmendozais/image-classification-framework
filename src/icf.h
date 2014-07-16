@@ -72,9 +72,14 @@ void read_feature_vectors_in_libsvm_format ( ClassificationImageSet &data, Featu
 	int dim = 0;
 	std::stringstream ss ( lines[0] );
 	std::string tok;
-	while ( ss >> tok ) ++ dim;
-		-- dim;
+	//while ( ss >> tok ) ++ dim;
+	//	-- dim;
+	dim = 623;
 	features = FeatureSet ( size, dim );
+	std::vector<string> class_names;
+	for ( int i = 0; i < classes.size(); ++ i)
+		class_names.push_back("" + (char)('A' + i));
+	features.setClassNames(class_names);
 	for ( int i = 0; i < lines.size(); ++ i ) {
 		std::stringstream ss2 ( lines[i] );
 		ss2 >> tok;

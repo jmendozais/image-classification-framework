@@ -11,6 +11,7 @@
 #include "classification/classifier.h"
 #include "new/data.h"
 #include <algorithm>
+#include <iomanip>
 
 class AbstractClassifierEvaluator {
 public:
@@ -119,19 +120,34 @@ public:
 		result.specificity.resize( num_classes_ );
 		result.belong_matrix = belong_matrix_;
 		for ( int i = 0; i < num_classes_; ++ i ) {
-			int tp, tn, fp, fn;
+			double tp, tn, fp, fn;
 			tp = tn = fp = fn = 0;
-			for ( int j = 0; j < num_classes_; ++ j )
+			int tc, fc;
+			fc = tc = 0;
+			for ( int j = 0; j < num_classes_; ++ j ) {
 				for ( int k = 0; k < num_classes_; ++ k ) {
-					if ( i != j && i != k )
+					if ( i != j && i != k ) {
 						tn += confussion_matrix_[j][k];
-					else if ( i == j && i != k )
+						fc += confussion_matrix_[j][k];
+					}
+					else if ( i == j && i != k ) {
 						fn += confussion_matrix_[j][k];
-					else if ( i != j && i == k )
+						tc += confussion_matrix_[j][k];
+					}
+					else if ( i != j && i == k ) {
 						fp += confussion_matrix_[j][k];
-					else if ( i == j && i == k )
+						fc += confussion_matrix_[j][k];
+					}
+					else if ( i == j && i == k ) {
 						tp += confussion_matrix_[j][k];
+						tc += confussion_matrix_[j][k];
+					}
 				}
+			}
+			tp /= tc;
+			fn /= tc;
+			fp /= fc;
+			tn /= fc;
 			result.precision[i] = tp * 1.0 / ( tp + fp );
 			result.sensibility[i] = tp * 1.0 / ( tp + fn );
 			result.specificity[i] = tn * 1.0 / ( tn + fp );
@@ -153,7 +169,7 @@ public:
 	virtual ClassifierEvaluatorResult evaluate() {
 		int num_classes_ = feature_set_->num_classes();
 		int data_size_ = feature_set_->size();
-		std::cout << "num classes " << num_classes_ << std::endl;
+		//std::cout << "num classes " << num_classes_ << std::endl;
 		std::vector<std::vector<double> > data_ = feature_set_->std_mat();
 		std::vector<int> responses_ = feature_set_->getDataClassIds();
 
@@ -180,7 +196,7 @@ public:
 		std::vector< int > train_responses, test_responses;
 		int klen;
 		for ( int k = 0; k < k_; ++ k ) {
-			std::cout << "K " << k << std::endl;
+			//std::cout << "K " << k << std::endl;
 			klen = std::min( (k+1)*fold_len, len ) - k*fold_len;
 			train_data.resize(len - klen);
 			train_responses.resize(len - klen);
@@ -215,19 +231,34 @@ public:
 		result.specificity.resize( num_classes_ );
 
 		for ( int i = 0; i < num_classes_; ++ i ) {
-			int tp, tn, fp, fn;
+			double tp, tn, fp, fn;
 			tp = tn = fp = fn = 0;
-			for ( int j = 0; j < num_classes_; ++ j )
+			int tc, fc;
+			fc = tc = 0;
+			for ( int j = 0; j < num_classes_; ++ j ) {
 				for ( int k = 0; k < num_classes_; ++ k ) {
-					if ( i != j && i != k )
+					if ( i != j && i != k ) {
 						tn += confussion_matrix_[j][k];
-					else if ( i == j && i != k )
+						fc += confussion_matrix_[j][k];
+					}
+					else if ( i == j && i != k ) {
 						fn += confussion_matrix_[j][k];
-					else if ( i != j && i == k )
+						tc += confussion_matrix_[j][k];
+					}
+					else if ( i != j && i == k ) {
 						fp += confussion_matrix_[j][k];
-					else if ( i == j && i == k )
+						fc += confussion_matrix_[j][k];
+					}
+					else if ( i == j && i == k ) {
 						tp += confussion_matrix_[j][k];
+						tc += confussion_matrix_[j][k];
+					}
 				}
+			}
+			tp /= tc;
+			fn /= tc;
+			fp /= fc;
+			tn /= fc;
 			result.precision[i] = tp * 1.0 / ( tp + fp );
 			result.sensibility[i] = tp * 1.0 / ( tp + fn );
 			result.specificity[i] = tn * 1.0 / ( tn + fp );
@@ -235,8 +266,9 @@ public:
 		}
 		result.global_accuracy = 1e-9;
 		for ( int i = 0; i < num_classes_; ++ i)
-			result.global_accuracy += confussion_matrix_[i][i];
-		result.global_accuracy /= data_.size();
+			result.global_accuracy += result.accuracy[i];//2.0*result.precision[i]*result.sensibility[i]/(result.precision[i]+result.sensibility[i]);//result.accuracy[i];//confussion_matrix_[i][i];
+		result.global_accuracy /= num_classes_;
+		//std::cout << std::setprecision(2) << std::fixed << " global acc: " << result.global_accuracy << std::endl;
 		return result;
 	}
 private:

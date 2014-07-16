@@ -6,7 +6,7 @@ void test_classification_image_set() {
 	data_set.create("/home/jmendoza/Escritorio/coffee.data", "/home/jmendoza/projects/cecovasa/data/LotePruebaV1.0/Resultado");
 	data_set.read("/home/jmendoza/Escritorio/coffee.data");
 	data_set.write("/home/jmendoza/Escritorio/coffee2.data", "/home/jmendoza/Escritorio/coffee2" );
-  std::cout << "test_classification_image_set() ... OK" << std::endl;
+	std::cout << "test_classification_image_set() ... OK" << std::endl;
 }
 void test_small_data () {
 	ClassificationImageSet data_set;
@@ -75,7 +75,7 @@ void test_feature_selection_3() {
 			 	 	 	 	 	 	 	 	 	 	 "/home/jmendoza/Desktop/brocado_all_s_115");
 }
 void test_classification_model() {
-
+	std::string fname = "/Users/mac/research/databases/cecovasa_76/gabor_45";
 	ClassificationModel model;
 
 	// Setting gabor wavelets params
@@ -88,12 +88,15 @@ void test_classification_model() {
 
 	// Classification pipeline
 	ClassificationImageSet data_set;
-	data_set.read("/home/jmendoza/Escritorio/coffee.data");
+	data_set.read("/Users/mac/research/databases/cecovasa_76/cecovasa.desc_cpp");
 
 	FeatureSet features = model.extractFeatures( data_set );
 	features.normalize();
-	features.write("/home/jmendoza/Escritorio/coffee_nomask.feat");
-	write_feature_vectors_in_libsvm_format  ( data_set, features, "/home/jmendoza/Escritorio/coffee_nomask.libsvm" );
+	features.write(fname + ".feat");
+	write_feature_vectors_in_libsvm_format  ( data_set, features, fname + ".libsvm" );
+	features.normalize();
+	features.write( fname + ".nfeat");
+	write_feature_vectors_in_libsvm_format  ( data_set, features, fname + ".nlibsvm" );
 	std::cout <<"Test Classification Model... OK" << std::endl;
 }
 
@@ -146,8 +149,8 @@ void test_knn () {
 }
 void test_all() {
 	ClassificationImageSet data;
-	data.create("/Users/mac/research/projects/coffee1.data", "/Users/mac/research/databases/cecovasa");
-	data.read("/Users/mac/research/projects/coffee1.data");
+	data.create("/Users/mac/research/databases/cecovasa_76/cecovasa.desc_cpp", "/Users/mac/research/databases/cecovasa_76");
+	/*data.read("/Users/mac/research/projects/coffee1.data");
 	ClassificationModel model;
 	GaborWaveletParams params;
 	params.num_orientations = 4;
@@ -160,10 +163,11 @@ void test_all() {
 	FeatureSet features = model.extractFeatures(data);
 	features.write("/home/jmendoza/Desktop/coffee_nomask.feat");
 	write_feature_vectors_in_libsvm_format(data, features, "/home/jmendoza/Desktop/coffee_nomask.libsvm");
+	*/
 }
 void test_loocv() {
 	ClassificationImageSet data_set;
-	data_set.read("/home/jmendoza/Desktop/coffee.data");
+	data_set.read("/Users/mac/research/databases/cecovasa_76/cecovasa.desc_cpp");
 	FeatureSet features, selected_features;
 	features.read("/home/jmendoza/Desktop/coffee_mask_gw_5_10.feat");
 	std::vector< std::vector<double> > fv = features.std_mat();
@@ -188,6 +192,22 @@ void cdh() {
 	ClassifierEvaluatorResult eval = evaluator.evaluate();
 	std::cout << "Global Accuracy " << eval.global_accuracy << std::endl;
 	write_classifier_evaluation_report( eval, data_set, "/home/jmendoza/Desktop/report_cdh_kfold" );
+}
+void feat_cdh() {
+	ClassificationImageSet data_set;
+	data_set.read("/Users/mac/research/databases/cecovasa_76/cecovasa.desc_cpp");
+	ClassificationModel model;
+	// Setting gabor wavelets params
+	CDHFeatureExtractor feature_extractor;
+	model.set_feature_extractor( &feature_extractor);
+	string fname = "/Users/mac/research/databases/cecovasa_76/cdh_cpp";
+	std::cout << fname << std::endl;
+	FeatureSet features = model.extractFeatures( data_set );
+	features.write( fname + ".feat" );
+	write_feature_vectors_in_libsvm_format  ( data_set, features, fname + ".libsvm" );
+	features.normalize();
+	features.write( fname + ".nfeat");
+	write_feature_vectors_in_libsvm_format  ( data_set, features, fname + ".nlibsvm" );
 }
 void test_rayner() {
 	ClassificationImageSet data_set;
@@ -234,14 +254,14 @@ void test_feature_extractor() {
 }
 void test_abc() {
 	ClassificationImageSet data_set;
-	data_set.read("/home/jmendoza/Desktop/coffee.data");
+	data_set.read("/Users/mac/research/databases/cecovasa_76/cecovasa.desc_cpp");
 	FeatureSet features, selected_features;
-	features.read("/home/jmendoza/Desktop/coffee_nomask.feat");
+	read_feature_vectors_in_libsvm_format(data_set, features, "/Users/mac/research/databases/cecovasa_76/cecovasa_fussed_1.libsvm");
 	std::vector< std::vector<double> > fv = features.std_mat();
 	std::vector< int > classes = data_set.std_data_classes();
-	KNNClassifier knn(10);
+	KNNClassifier knn(5);
 	knn.train( fv, classes );
-	KFOLDCV evaluator ( &knn, &data_set, &features, 10);
+	KFOLDCV evaluator ( &knn, &data_set, &features, 5);
 	ClassifierFitnessFunction fitness ( &knn, &evaluator, fv, classes );
 	//ClassifierEvaluatorResult eval = evaluator.evaluate();
 	ABCWrapperSelector selector ( &knn, &evaluator);
@@ -338,12 +358,12 @@ void test_gabor_pca( ) {
 	dao.create("/home/jmendoza/Desktop/gabor_pca.arff");
 }
 void gabor_FTW ( std::string path ) {
-
+/*
 	cv::Mat sample = cv::imread(path);
 	cv::resize(sample, sample, cv::Size(1200,1200));
 	cv::namedWindow("Original Image");
 	cv::imshow("Original Image", sample);
-	cv::waitKey();
+	cv::waitKey();*/
 	std::vector<GaborWaveletParams> params ( 3 );
 	std::string desc[3] = {"gw_3_5_TUNEADO_entr_mag", "gw_3_5_TUNEADO_entr_real", ""};
 	params[0].num_scales = 3;
@@ -364,13 +384,12 @@ void gabor_FTW ( std::string path ) {
 
 	for ( int i = 0; i < 2; ++ i ) {
 		ClassificationImageSet data_set;
-		data_set.read("/home/jmendoza/Desktop/coffee.data");
+		data_set.read("/Users/mac/research/databases/cecovasa_76/cecovasa.desc_cpp");
 		ClassificationModel model;
 		GaborWavelet gabor_wavelet ( params[i] );
-		gabor_wavelet.extractFeatures ( sample );
-		/*
+		//gabor_wavelet.extractFeatures ( sample );
 		model.set_feature_extractor( &gabor_wavelet);
-		string fname = "/home/jmendoza/Desktop/gw_entropy_" + desc[i];
+		string fname = "/Users/mac/research/databases/cecovasa_76/gw_entropy_" + desc[i];
 		std::cout << fname << std::endl;
 		FeatureSet features = model.extractFeatures( data_set );
 		features.write( fname + ".feat" );
@@ -379,6 +398,7 @@ void gabor_FTW ( std::string path ) {
 		features.write( fname + ".nfeat");
 		write_feature_vectors_in_libsvm_format  ( data_set, features, fname + ".nlibsvm" );
 		// cambio
+		/*
 		features.setClassNames(data_set.getClassNames());
 		features.setDataClassIds(data_set.getDataClassIds());
 		WekaFeatureSetDao dao;
@@ -567,12 +587,13 @@ int main(int argc, char* argv[])
 	//test_feature_selection_3();
 	//test_brocados_2();
 	//test_knn();
-	test_all();
+	//test_all();
+	//feat_cdh();
 	//test_loocv();
 	//cdh();
 	//test_rayner();
 	//test_feature_extractor();
-	//test_abc();
+	test_abc();
 	//test_image_transform();
 	//test_weka();
 	//kfold ( "/home/jmendoza/Desktop/coffee.data", "/home/jmendoza/Desktop/gw_entropy_gw_3_5_TUNEADO_entr_mag.nfeat" );
@@ -594,6 +615,5 @@ int main(int argc, char* argv[])
 	dao.setFeatureSet(fs);
 	dao.create("/home/jmendoza/Desktop/out");
 	*/
-
 	return 0;
 }
